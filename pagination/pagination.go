@@ -13,6 +13,7 @@ type Param struct {
 	Limit   int
 	OrderBy []string
 	ShowSQL bool
+	Where   string `json:"where"`
 }
 
 // Paginator 分页返回
@@ -44,6 +45,9 @@ func Pagging(p *Param, dataSource interface{}) *Paginator {
 		for _, o := range p.OrderBy {
 			db = db.Order(o)
 		}
+	}
+	if p.Where != "" {
+		db = db.Where(p.Where)
 	}
 
 	done := make(chan bool, 1)
