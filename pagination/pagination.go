@@ -3,7 +3,7 @@ package pagination
 import (
 	"math"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // Param 分页参数
@@ -18,7 +18,7 @@ type Param struct {
 
 // Paginator 分页返回
 type Paginator struct {
-	TotalRecord int         `json:"total_record"`
+	TotalRecord int64       `json:"total_record"`
 	TotalPage   int         `json:"total_page"`
 	Records     interface{} `json:"records"`
 	Offset      int         `json:"offset"`
@@ -52,7 +52,7 @@ func Pagging(p *Param, dataSource interface{}) *Paginator {
 
 	done := make(chan bool, 1)
 	var paginator Paginator
-	var count int
+	var count int64
 	var offset int
 
 	go countRecords(db, dataSource, done, &count)
@@ -88,7 +88,7 @@ func Pagging(p *Param, dataSource interface{}) *Paginator {
 	return &paginator
 }
 
-func countRecords(db *gorm.DB, countDataSource interface{}, done chan bool, count *int) {
+func countRecords(db *gorm.DB, countDataSource interface{}, done chan bool, count *int64) {
 	db.Model(countDataSource).Count(count)
 	done <- true
 }
