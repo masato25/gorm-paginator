@@ -55,7 +55,7 @@ func Pagging(p *Param, dataSource interface{}) *Paginator {
 	var count int64
 	var offset int
 
-	go countRecords(db, dataSource, done, &count)
+	go countRecords(p.DB, dataSource, done, &count)
 
 	if p.Page == 1 {
 		offset = 0
